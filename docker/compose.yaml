@@ -18,7 +18,7 @@ services:
       retries: 5
 
   backend:
-    build: .
+    build: ../slotter-ws/
     container_name: backend
     restart: unless-stopped
     ports:
@@ -30,6 +30,18 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  frontend:
+    build: ../frontend/
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
