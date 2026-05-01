@@ -1,0 +1,88 @@
+slotter-ws/
+├── src/
+│   └── main/
+│       ├── kotlin/
+│       │   └── com/isanz/slotterws/
+│       │       ├── SlotterWsApplication.kt
+│       │       │
+│       │       ├── modules/
+│       │       │   ├── users/
+│       │       │   │   ├── domain/
+│       │       │   │   │   ├── User.kt                  # Entity (pure Kotlin, no framework)
+│       │       │   │   │   └── UserRepository.kt        # Port (interface)
+│       │       │   │   ├── application/
+│       │       │   │   │   ├── UserService.kt           # Use cases
+│       │       │   │   │   └── dto/
+│       │       │   │   │       ├── UserRequestDTO.kt
+│       │       │   │   │       └── UserResponseDTO.kt
+│       │       │   │   └── infrastructure/
+│       │       │   │       ├── UserController.kt        # Adapter in (REST)
+│       │       │   │       └── UserRepositoryImpl.kt    # Adapter out (Exposed)
+│       │       │   ├── auth/
+│       │       │   │   ├── domain/
+│       │       │   │   │   └── Session.kt
+│       │       │   │   ├── application/
+│       │       │   │   │   ├── AuthService.kt
+│       │       │   │   │   └── dto/
+│       │       │   │   │       ├── LoginRequestDTO.kt
+│       │       │   │   │       └── LoginResponseDTO.kt
+│       │       │   │   └── infrastructure/
+│       │       │   │       ├── AuthController.kt
+│       │       │   │       └── SessionRepositoryImpl.kt
+│       │       │   ├── roles/
+│       │       │   │   ├── domain/
+│       │       │   │   │   ├── Role.kt
+│       │       │   │   │   └── RoleRepository.kt
+│       │       │   │   ├── application/
+│       │       │   │   │   ├── RoleService.kt
+│       │       │   │   │   └── dto/
+│       │       │   │   │       ├── RoleRequestDTO.kt
+│       │       │   │   │       └── RoleResponseDTO.kt
+│       │       │   │   └── infrastructure/
+│       │       │   │       ├── RoleController.kt
+│       │       │   │       └── RoleRepositoryImpl.kt
+│       │       │   ├── actions/
+│       │       │   │   ├── domain/
+│       │       │   │   │   ├── Action.kt
+│       │       │   │   │   └── ActionRepository.kt
+│       │       │   │   ├── application/
+│       │       │   │   │   ├── ActionService.kt
+│       │       │   │   │   └── dto/
+│       │       │   │   │       ├── ActionRequestDTO.kt
+│       │       │   │   │       └── ActionResponseDTO.kt
+│       │       │   │   └── infrastructure/
+│       │       │   │       ├── ActionController.kt
+│       │       │   │       └── ActionRepositoryImpl.kt
+│       │       │   └── companies/
+│       │       │       ├── domain/
+│       │       │       │   ├── Company.kt
+│       │       │       │   └── CompanyRepository.kt
+│       │       │       ├── application/
+│       │       │       │   ├── CompanyService.kt
+│       │       │       │   └── dto/
+│       │       │       │       ├── CompanyRequestDTO.kt
+│       │       │       │       └── CompanyResponseDTO.kt
+│       │       │       └── infrastructure/
+│       │       │           ├── CompanyController.kt
+│       │       │           └── CompanyRepositoryImpl.kt
+│       │       │
+│       │       └── shared/
+│       │           ├── config/
+│       │           │   ├── SecurityConfig.kt
+│       │           │   └── DatabaseConfig.kt
+│       │           ├── security/
+│       │           │   ├── JwtFilter.kt
+│       │           │   ├── JwtService.kt
+│       │           │   └── UserDetailsServiceImpl.kt
+│       │           └── exceptions/
+│       │               ├── GlobalExceptionHandler.kt
+│       │               └── ApiResponse.kt
+│       │
+│       └── resources/
+│           ├── application.properties
+│           └── db/
+│               └── migration/
+│                   └── V1__init.sql
+├── Dockerfile
+├── compose.yaml
+└── .env
