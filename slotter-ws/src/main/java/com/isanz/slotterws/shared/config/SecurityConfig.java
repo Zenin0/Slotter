@@ -27,18 +27,17 @@ public class SecurityConfig {
             HttpSecurity http,
             SessionAuthFilter sessionAuthFilter,
             CustomAuthenticationEntryPoint entryPoint
-    ) {
-
+    ) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable) // ✅ servlet filter handles it
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(entryPoint)
-                )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
                 .addFilterBefore(sessionAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

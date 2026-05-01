@@ -111,3 +111,13 @@ CREATE INDEX idx_audit_log_table ON audit_log (table_name, record_id);
 
 CREATE INDEX idx_company_slug ON company (slug);
 CREATE INDEX idx_company_theme ON company_theme (id_company);
+
+INSERT INTO company (name, company_logo, slug)
+VALUES ('Isaac Sanz S.L', '', 'isg');
+
+SELECT *
+    FROM company;
+
+
+INSERT INTO users (company_id, username, email, password, profile_image)
+VALUES ('9a3a7e1f-a4ec-46fa-ae3e-6fa9cdf06a87', 'isanz', 'isaacsanz@proton.me', '$2a$12$g3Jdk/.dqN5wN4lL/CxLIOjKPuGWorY3U2mOqSUCpKY1Cz.oTJeV2', '');
