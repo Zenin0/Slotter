@@ -38,4 +38,9 @@ public class SessionController {
         return ResponseEntity.ok(ApiResponse.ok("Logged out successfully"));
     }
 
+    @GetMapping("/checkSession")
+    public ResponseEntity<ApiResponse<String>> checkSession() {
+        return ResponseEntity.ok(ApiResponse.ok());
+    }
+
 }

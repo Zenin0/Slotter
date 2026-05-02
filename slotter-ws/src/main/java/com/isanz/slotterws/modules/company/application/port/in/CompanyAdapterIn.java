@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class CompanyAdapterIn implements AdapterIn<CompanyRequestDTO, CompanyResponseDTO> {
+public class CompanyAdapterIn implements AdapterIn<CompanyRequestDTO, CompanyResponseDTO, Company> {
 
     private final CompanyMapper companyMapper;
 
@@ -37,5 +37,10 @@ public class CompanyAdapterIn implements AdapterIn<CompanyRequestDTO, CompanyRes
     @Override
     public void delete(UUID uuid) {
         companyRepository.deleteById(uuid);
+    }
+
+    @Override
+    public void update(Company entity) {
+        companyRepository.save(entity);
     }
 }

@@ -11,4 +11,5 @@ public class UserResponseDTO {
     UUID id;
     String email;
     String username;
+    Boolean isActive;
 }

@@ -1,5 +1,7 @@
 package com.isanz.slotterws.modules.session.application.port.mapper;
 
+import com.isanz.slotterws.modules.role.application.dto.RoleFullDTO;
+import com.isanz.slotterws.modules.role.domain.Role;
 import com.isanz.slotterws.modules.session.application.dto.SessionFullDTO;
 import com.isanz.slotterws.modules.session.application.dto.SessionRequestDTO;
 import com.isanz.slotterws.modules.session.application.dto.SessionResponseDTO;
@@ -8,6 +10,7 @@ import com.isanz.slotterws.shared.implementations.adapter.mapper.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -17,7 +20,7 @@ public class SessionMapper implements Mapper<Session, SessionRequestDTO, Session
     public SessionResponseDTO toDTO(Session entity) {
         SessionResponseDTO response = new SessionResponseDTO();
         response.setToken(entity.getToken());
-        response.setUsername(entity.getUser().getUsername());
+        response.setUserid(entity.getUser().getId());
         return response;
     }
 
@@ -48,5 +51,15 @@ public class SessionMapper implements Mapper<Session, SessionRequestDTO, Session
         dto.setIpAddress(entity.getIpAddress());
         dto.setExpiresAt(entity.getExpiresAt());
         return dto;
+    }
+
+    @Override
+    public List<SessionFullDTO> toFullDTOs(List<Session> entities) {
+        List<SessionFullDTO> dtos = new ArrayList<>();
+        for (Session session : entities) {
+            dtos.add(toFullDTO(session));
+        }
+
+        return dtos;
     }
 }

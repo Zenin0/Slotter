@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class UserAdapterIn implements AdapterIn<UserRequestDTO, UserResponseDTO> {
+public class UserAdapterIn implements AdapterIn<UserRequestDTO, UserResponseDTO, User> {
 
     private final UserMapper userMapper;
 
@@ -44,6 +44,11 @@ public class UserAdapterIn implements AdapterIn<UserRequestDTO, UserResponseDTO>
     @Override
     public void delete(UUID uuid) {
         userRepository.deleteById(uuid);
+    }
+
+    @Override
+    public void update(User entity) {
+        userRepository.save(entity);
     }
 
 }

@@ -26,6 +26,6 @@ async function request<T>(url: string, method: HttpMethod, body?: unknown): Prom
 export const RestService = {
     get: <T,>(url: string): Promise<T> => request<T>(url, "GET"),
     post: <T, B>(url: string, body: B): Promise<T> => request<T>(url, "POST", body),
-    delete: <T,>(url: string): Promise<T> => request<T>(url, "DELETE"),
+    delete: <T, B>(url: string, body: B): Promise<T> => request<T>(url, "DELETE", body),
     put: <T, B>(url: string, body: B): Promise<T> => request<T>(url, "PUT", body),
 };

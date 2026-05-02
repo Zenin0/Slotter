@@ -1,5 +1,6 @@
 package com.isanz.slotterws.modules.users.application.port.mapper;
 
+import com.isanz.slotterws.modules.company.application.port.mapper.CompanyMapper;
 import com.isanz.slotterws.modules.company.application.service.CompanyService;
 import com.isanz.slotterws.modules.users.application.dto.UserFullDTO;
 import com.isanz.slotterws.modules.users.application.dto.UserRequestDTO;
@@ -19,10 +20,12 @@ public class UserMapper implements Mapper<User, UserRequestDTO, UserResponseDTO,
 
     private final CompanyService companyService;
     private final PasswordEncoder passwordEncoder;
+    private final CompanyMapper companyMapper;
 
-    public UserMapper(CompanyService companyService, PasswordEncoder passwordEncoder) {
+    public UserMapper(CompanyService companyService, PasswordEncoder passwordEncoder, CompanyMapper companyMapper) {
         this.companyService = companyService;
         this.passwordEncoder = passwordEncoder;
+        this.companyMapper = companyMapper;
     }
 
     @Override
@@ -31,6 +34,7 @@ public class UserMapper implements Mapper<User, UserRequestDTO, UserResponseDTO,
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
+        dto.setIsActive(user.getIsActive());
         return dto;
     }
 
@@ -64,11 +68,21 @@ public class UserMapper implements Mapper<User, UserRequestDTO, UserResponseDTO,
     public UserFullDTO toFullDTO(User user) {
         UserFullDTO dto = new UserFullDTO();
         dto.setId(user.getId());
-        dto.setCompanyId(user.getCompany().getId());
+        dto.setCompany(companyMapper.toDTO(user.getCompany()));
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setProfileImage(user.getProfileImage());
         dto.setIsActive(user.getIsActive());
         return dto;
+    }
+
+    public List<UserFullDTO> toFullDTOs(List<User> users) {
+        List<UserFullDTO> dtos = new ArrayList<>();
+
+        for (User user : users) {
+            dtos.add(toFullDTO(user));
+        }
+
+        return dtos;
     }
 }

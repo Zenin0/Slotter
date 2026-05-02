@@ -12,6 +12,8 @@ public interface Mapper<E, Req, Res, Full> {
 
     Full toFullDTO(E entity);
 
+    List<Full> toFullDTOs(List<E> entities);
+
 
 
 }

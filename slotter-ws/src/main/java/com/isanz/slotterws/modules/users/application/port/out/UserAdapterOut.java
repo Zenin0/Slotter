@@ -52,7 +52,7 @@ public class UserAdapterOut implements AdapterOut<UserResponseDTO, User, UserFul
     }
 
     @Override
-    public UserFullDTO show(UUID uuid) {
+    public UserFullDTO show(UUID uuid) throws UserNotFoundException {
 
         User user = findOne(uuid);
 

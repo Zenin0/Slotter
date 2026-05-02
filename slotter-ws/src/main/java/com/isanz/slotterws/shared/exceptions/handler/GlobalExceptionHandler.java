@@ -2,11 +2,13 @@ package com.isanz.slotterws.shared.exceptions.handler;
 
 import com.isanz.slotterws.shared.exceptions.GenericException;
 import com.isanz.slotterws.shared.exceptions.alreadyexists.CompanyAlreadyExistsException;
+import com.isanz.slotterws.shared.exceptions.alreadyexists.RoleAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.alreadyexists.UserAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.auth.InvalidCredentialsException;
 import com.isanz.slotterws.shared.exceptions.auth.InvalidSessionException;
 import com.isanz.slotterws.shared.exceptions.auth.SessionExpiredException;
 import com.isanz.slotterws.shared.exceptions.notfound.CompanyNotFoundException;
+import com.isanz.slotterws.shared.exceptions.notfound.RoleNotFoundException;
 import com.isanz.slotterws.shared.exceptions.notfound.UserNotFoundException;
 import com.isanz.slotterws.shared.model.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleUserNotFound(RoleNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<?>> handleUserAlreadyExists(UserAlreadyExistsException ex) {
         log.error(ex.getMessage(), ex);
@@ -39,6 +47,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CompanyAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<?>> handleCompanyAlreadyExists(CompanyAlreadyExistsException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(RoleAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<?>> handleCompanyAlreadyExists(RoleAlreadyExistsException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
     }

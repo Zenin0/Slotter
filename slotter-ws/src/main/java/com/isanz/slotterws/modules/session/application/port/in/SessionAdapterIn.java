@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class SessionAdapterIn implements AdapterIn<SessionRequestDTO, SessionResponseDTO> {
+public class SessionAdapterIn implements AdapterIn<SessionRequestDTO, SessionResponseDTO, Session> {
 
     private final SessionMapper sessionMapper;
     private final SessionRepository sessionRepository;
@@ -32,5 +32,10 @@ public class SessionAdapterIn implements AdapterIn<SessionRequestDTO, SessionRes
 
     public void delete(UUID uuid) {
         sessionRepository.deleteById(uuid);
+    }
+
+    @Override
+    public void update(Session entity) {
+        sessionRepository.save(entity);
     }
 }
