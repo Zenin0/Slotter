@@ -3,7 +3,6 @@ package com.isanz.slotterws.modules.role.application.service;
 import com.isanz.slotterws.modules.role.application.dto.RoleFullDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleRequestDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleResponseDTO;
-import com.isanz.slotterws.modules.role.application.dto.RoleUpdateDTO;
 import com.isanz.slotterws.modules.role.application.port.in.RoleAdapterIn;
 import com.isanz.slotterws.modules.role.application.port.mapper.RoleMapper;
 import com.isanz.slotterws.modules.role.application.port.out.RoleAdapterOut;
@@ -12,6 +11,7 @@ import com.isanz.slotterws.modules.users.application.port.out.UserAdapterOut;
 import com.isanz.slotterws.modules.users.domain.User;
 import com.isanz.slotterws.shared.exceptions.alreadyexists.RoleAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.notfound.UserNotFoundException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class RoleService {
     private final UserAdapterOut userAdapterOut;
     private final RoleMapper roleMapper;
 
-    public RoleService(RoleAdapterOut roleAdapterOut, RoleAdapterIn roleAdapterIn, UserAdapterOut userAdapterOut, RoleMapper roleMapper) {
+    public RoleService(@Lazy RoleAdapterOut roleAdapterOut,@Lazy RoleAdapterIn roleAdapterIn, @Lazy RoleMapper roleMapper, UserAdapterOut userAdapterOut) {
         this.roleAdapterOut = roleAdapterOut;
         this.roleAdapterIn = roleAdapterIn;
         this.userAdapterOut = userAdapterOut;
@@ -70,13 +70,8 @@ public class RoleService {
         return roleAdapterOut.findAllUser(uuid);
     }
 
-    public void update(RoleUpdateDTO request) {
-
-        Role role = roleAdapterOut.findOne(request.getId());
-        role.setName(request.getName());
-        role.setDescription(request.getDescription());
-        role.setIsActive(request.getIsActive());
-
+    public void update(UUID uuid, RoleRequestDTO request) {
+        Role role = roleMapper.toEntity(request, uuid);
         roleAdapterIn.update(role);
     }
 }

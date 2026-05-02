@@ -3,9 +3,7 @@ package com.isanz.slotterws.modules.role.infrastructure;
 import com.isanz.slotterws.modules.role.application.dto.RoleFullDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleRequestDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleResponseDTO;
-import com.isanz.slotterws.modules.role.application.dto.RoleUpdateDTO;
 import com.isanz.slotterws.modules.role.application.service.RoleService;
-import com.isanz.slotterws.modules.role.domain.Role;
 import com.isanz.slotterws.shared.model.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +36,9 @@ public class RoleController {
         return ResponseEntity.ok(ApiResponse.ok(roleService.show(uuid)));
     }
 
-    @PutMapping
-    public ResponseEntity<ApiResponse<RoleResponseDTO>> update(@RequestBody RoleUpdateDTO request) {
-        roleService.update(request);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> update(@PathVariable UUID uuid, @RequestBody RoleRequestDTO request) {
+        roleService.update(uuid, request);
         return ResponseEntity.ok(ApiResponse.ok());
     }
 

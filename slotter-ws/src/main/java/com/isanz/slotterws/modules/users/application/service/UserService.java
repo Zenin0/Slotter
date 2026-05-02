@@ -4,28 +4,33 @@ import com.isanz.slotterws.modules.users.application.dto.UserFullDTO;
 import com.isanz.slotterws.modules.users.application.dto.UserRequestDTO;
 import com.isanz.slotterws.modules.users.application.dto.UserResponseDTO;
 import com.isanz.slotterws.modules.users.application.port.in.UserAdapterIn;
+import com.isanz.slotterws.modules.users.application.port.mapper.UserMapper;
 import com.isanz.slotterws.modules.users.application.port.out.UserAdapterOut;
 import com.isanz.slotterws.modules.users.domain.User;
 import com.isanz.slotterws.shared.exceptions.GenericException;
 import com.isanz.slotterws.shared.exceptions.alreadyexists.UserAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.notfound.CompanyNotFoundException;
 import com.isanz.slotterws.shared.exceptions.notfound.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class UserService {
 
     private final UserAdapterOut userAdapterOut;
     private final UserAdapterIn userAdapterIn;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserAdapterOut userAdapterOut, UserAdapterIn userAdapterIn) {
+    public UserService(UserAdapterOut userAdapterOut, UserAdapterIn userAdapterIn, UserMapper userMapper) {
         this.userAdapterOut = userAdapterOut;
         this.userAdapterIn = userAdapterIn;
+        this.userMapper = userMapper;
     }
 
     public List<UserResponseDTO> getAll() {
@@ -48,10 +53,20 @@ public class UserService {
     }
 
     private void setAsActive(UserRequestDTO request) {
-        request.setActive(true);
+        request.setIsActive(true);
     }
 
     public UserFullDTO show(UUID uuid) {
         return userAdapterOut.show(uuid);
+    }
+
+    public List<UserResponseDTO> findAllByCompany(UUID uuid) throws CompanyNotFoundException {
+        return userAdapterOut.findAllByCompany(uuid);
+    }
+
+    public void update(UUID uuid, UserRequestDTO request) {
+        log.info(request.getIsActive().toString());
+        User user = userMapper.toEntity(request, uuid);
+        userAdapterIn.update(user);
     }
 }

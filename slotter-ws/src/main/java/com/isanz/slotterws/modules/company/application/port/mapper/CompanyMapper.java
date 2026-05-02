@@ -5,18 +5,17 @@ import com.isanz.slotterws.modules.company.application.dto.CompanyRequestDTO;
 import com.isanz.slotterws.modules.company.application.dto.CompanyResponseDTO;
 import com.isanz.slotterws.modules.company.domain.Company;
 import com.isanz.slotterws.modules.users.application.port.mapper.UserMapper;
-import com.isanz.slotterws.modules.users.domain.User;
 import com.isanz.slotterws.shared.implementations.adapter.mapper.Mapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class CompanyMapper implements Mapper<Company, CompanyRequestDTO, CompanyResponseDTO, CompanyFullDTO> {
 
-    @Lazy
     private final UserMapper userMapper;
 
     public CompanyMapper(@Lazy UserMapper userMapper) {
@@ -38,10 +37,8 @@ public class CompanyMapper implements Mapper<Company, CompanyRequestDTO, Company
         for (Company company : entities) {
             list.add(toDTO(company));
         }
-
         return list;
     }
-
 
     @Override
     public Company fromDTO(CompanyRequestDTO request) {
@@ -68,7 +65,15 @@ public class CompanyMapper implements Mapper<Company, CompanyRequestDTO, Company
         for (Company company : entities) {
             dtos.add(toFullDTO(company));
         }
-
         return dtos;
+    }
+
+    @Override
+    public Company toEntity(CompanyRequestDTO request, UUID uuid) {
+        Company company = new Company();
+        company.setId(uuid);
+        company.setSlug(request.getSlug());
+        company.setName(request.getName());
+        return company;
     }
 }

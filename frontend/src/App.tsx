@@ -4,6 +4,7 @@ import Dashboard from "./modules/dashboard/DashBoard";
 import Roles from "./modules/roles/Roles"
 import { ProtectedRoute } from "./modules/auth/ProtectedRoute";
 import { useTheme } from "./modules/shared/hooks/useTheme";
+import Users from "./modules/user/User";
 
 function App() {
     useTheme();
@@ -15,6 +16,7 @@ function App() {
                     <Route path="/:slug" element={<ProtectedRoute />}>
                         <Route path="dashboard" element={<Dashboard />}/>
                         <Route path="roles" element={<Roles />}/>
+                        <Route path="users" element={<Users />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

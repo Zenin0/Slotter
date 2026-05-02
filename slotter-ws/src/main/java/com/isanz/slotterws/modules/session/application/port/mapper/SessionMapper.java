@@ -1,7 +1,5 @@
 package com.isanz.slotterws.modules.session.application.port.mapper;
 
-import com.isanz.slotterws.modules.role.application.dto.RoleFullDTO;
-import com.isanz.slotterws.modules.role.domain.Role;
 import com.isanz.slotterws.modules.session.application.dto.SessionFullDTO;
 import com.isanz.slotterws.modules.session.application.dto.SessionRequestDTO;
 import com.isanz.slotterws.modules.session.application.dto.SessionResponseDTO;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class SessionMapper implements Mapper<Session, SessionRequestDTO, SessionResponseDTO, SessionFullDTO> {
@@ -61,5 +60,17 @@ public class SessionMapper implements Mapper<Session, SessionRequestDTO, Session
         }
 
         return dtos;
+    }
+
+    @Override
+    public Session toEntity(SessionRequestDTO request, UUID uuid) {
+        Session session = new Session();
+        session.setId(uuid);
+        session.setToken(request.getToken());
+        session.setIpAddress(request.getIpAddress());
+        session.setUserAgent(request.getUserAgent());
+        session.setUser(request.getUser());
+
+        return session;
     }
 }

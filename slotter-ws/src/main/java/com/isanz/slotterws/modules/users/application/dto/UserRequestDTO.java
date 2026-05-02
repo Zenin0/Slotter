@@ -12,5 +12,5 @@ public class UserRequestDTO {
     String username;
     String password;
     UUID companyId;
-    boolean isActive;
+    Boolean isActive;
 }

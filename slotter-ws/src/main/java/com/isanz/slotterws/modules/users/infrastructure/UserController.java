@@ -37,4 +37,15 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserFullDTO>> show(@PathVariable UUID uuid) {
         return ResponseEntity.ok(ApiResponse.ok(userService.show(uuid)));
     }
+
+    @GetMapping("/company/{uuid}")
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> findAllByCompany(@PathVariable UUID uuid) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.findAllByCompany(uuid)));
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> update(@PathVariable UUID uuid, @RequestBody UserRequestDTO request ) {
+        userService.update(uuid, request);
+        return ResponseEntity.ok(ApiResponse.ok());
+    }
 }

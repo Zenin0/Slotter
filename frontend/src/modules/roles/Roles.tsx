@@ -73,7 +73,7 @@ function Roles() {
         if (!editingRole || !editName.trim()) return;
         setEditSaving(true);
         try {
-            await RestService.put(`/api/role`, {
+            await RestService.put(`/api/role/${editingRole.id}`, {
                 ...editingRole,
                 name: editName,
                 description: editDescription,
@@ -89,7 +89,7 @@ function Roles() {
 
     const handleToggleActive = async (role: Role) => {
         try {
-            await RestService.put(`/api/role`, { ...role, isActive: !role.isActive });
+            await RestService.put(`/api/role/${role.id}`, { ...role, isActive: !role.isActive });
             await fetchRoles();
         } catch {
             setError("Failed to update role.");

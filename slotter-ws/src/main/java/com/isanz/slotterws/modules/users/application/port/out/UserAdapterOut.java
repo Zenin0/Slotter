@@ -1,13 +1,17 @@
 package com.isanz.slotterws.modules.users.application.port.out;
 
+import com.isanz.slotterws.modules.company.application.port.out.CompanyAdapterOut;
+import com.isanz.slotterws.modules.company.domain.Company;
 import com.isanz.slotterws.modules.users.application.dto.UserFullDTO;
 import com.isanz.slotterws.modules.users.application.dto.UserResponseDTO;
 import com.isanz.slotterws.modules.users.application.port.mapper.UserMapper;
 import com.isanz.slotterws.modules.users.domain.User;
 import com.isanz.slotterws.modules.users.domain.UserRepository;
+import com.isanz.slotterws.shared.exceptions.notfound.CompanyNotFoundException;
 import com.isanz.slotterws.shared.exceptions.notfound.UserNotFoundException;
 import com.isanz.slotterws.shared.implementations.adapter.out.AdapterOut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,13 +22,14 @@ import java.util.UUID;
 public class UserAdapterOut implements AdapterOut<UserResponseDTO, User, UserFullDTO> {
 
     private final UserRepository userRepository;
-
     private final UserMapper userMapper;
+    private final CompanyAdapterOut companyAdapterOut;
 
     @Autowired
-    public UserAdapterOut(UserRepository userRepository, UserMapper userMapper) {
+    public UserAdapterOut(@Lazy UserRepository userRepository, @Lazy UserMapper userMapper, CompanyAdapterOut companyAdapterOut) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.companyAdapterOut = companyAdapterOut;
     }
 
 
@@ -67,5 +72,12 @@ public class UserAdapterOut implements AdapterOut<UserResponseDTO, User, UserFul
         }
 
         return user.get();
+    }
+
+    public List<UserResponseDTO> findAllByCompany(UUID uuid) throws CompanyNotFoundException {
+
+        Company company = companyAdapterOut.findOne(uuid);
+
+        return userMapper.toDTOs(userRepository.findByCompany(company));
     }
 }
