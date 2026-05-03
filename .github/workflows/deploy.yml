@@ -39,8 +39,8 @@ jobs:
               
               git pull origin main
               
-              docker compose -f ./docker/compose.yml down || true
-              docker compose -f ./docker/compose.yml up -d --build --force-recreate --remove-orphans
+              docker compose -f ./docker/compose.yaml down || true
+              docker compose -f ./docker/compose.yaml up -d --build --force-recreate --remove-orphans
               
               docker system prune -f
 
