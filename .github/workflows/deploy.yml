@@ -35,6 +35,8 @@ jobs:
 
               cd "$APP_DIR"
 
+              pwd
+
               git pull origin main
 
               docker compose down || true
