@@ -1,132 +1,130 @@
-<h1 align="center">Slotter</h1>
-<p align="center">Streamline your scheduling and booking processes with an intuitive, powerful web application.</p>
-
 <p align="center">
-  <img alt="Build Status" src="https://img.shields.io/badge/Build-Passing-brightgreen" />
-  <img alt="License" src="https://img.shields.io/badge/License-CC0_1.0-lightgrey" />
-  <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-Welcome-brightgreen" />
-  <img alt="GitHub Stars" src="https://img.shields.io/github/stars/YOUR_ORG_OR_USER/Slotter?style=social" />
+  <h1>Slotter</h1>
+  <p align="center">Streamlining booking management for effortless scheduling.</p>
+  <p align="center">
+    <img src="https://github.com/your-org/slotter/actions/workflows/build.yml/badge.svg" alt="Build Status" />
+    <img src="https://img.shields.io/badge/License-CC0_1.0_Universal-lightgrey.svg" alt="License: CC0 1.0 Universal" />
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome" />
+    <img src="https://img.shields.io/github/stars/your-org/slotter?style=social" alt="GitHub Stars" />
+  </p>
 </p>
 
 ---
 
-## The Strategic "Why" (Overview)
+## The Strategic "Why"
 
-> **The Problem:** Many organizations struggle with inefficient, manual, or fragmented booking systems, leading to double-bookings, missed appointments, and significant administrative overhead. This often results in frustrated users, lost revenue, and a poor overall experience. The challenge lies in finding a unified, reliable, and user-friendly platform that can adapt to diverse scheduling needs.
+> Manually managing bookings can be a chaotic, time-consuming, and error-prone process, leading to missed appointments, double-bookings, and frustrated clients. Existing solutions are often rigid, expensive, or lack the flexibility needed for diverse scheduling requirements. This inefficiency directly impacts productivity and client satisfaction.
 
-**The Solution:** Slotter addresses these critical pain points by providing a comprehensive, web-based booking management application. It offers a centralized platform for creating, managing, and tracking bookings with unparalleled ease and accuracy. By automating the booking lifecycle, Slotter empowers businesses and individuals to optimize resource allocation, enhance customer satisfaction, and significantly reduce operational complexities, ensuring a seamless and error-free scheduling experience.
+Slotter provides a robust, intuitive web application designed to centralize and automate your booking management. It empowers businesses and individuals to effortlessly schedule, track, and modify appointments, ensuring seamless operations and an enhanced user experience. By delivering a modern, scalable, and developer-friendly platform, Slotter eliminates the common pitfalls of traditional booking systems, allowing you to focus on what truly matters.
 
 ---
 
 ## Key Features
 
-*   🗓️ **Intuitive Booking Calendar:** Easily view, create, and modify bookings with a drag-and-drop interface, ensuring efficient time management.
-*   ⏱️ **Real-time Availability:** Instantly see open slots and prevent overbooking with dynamic availability updates across all resources.
-*   ⚙️ **Robust Admin Controls:** Granular permissions and management tools allow administrators to configure resources, user roles, and booking rules with precision.
-*   🔒 **Secure Data Management:** Built with security in mind, Slotter protects sensitive booking information and user data through robust backend architecture.
-*   🔔 **Automated Notifications:** Keep users and administrators informed with customizable email or in-app notifications for booking confirmations, changes, and reminders.
-*   📈 **Scalable Architecture:** Designed with a modular Java backend, Slotter can grow with your needs, handling increasing booking volumes and user loads efficiently.
+*   📅 **Intuitive Booking Interface**: Easily create, view, and modify appointments through a user-friendly web application, designed for maximum efficiency.
+*   ✅ **Real-time Availability**: Prevent double-bookings with up-to-the-minute slot availability, ensuring accurate scheduling and reducing conflicts.
+*   🔗 **Seamless Integration**: A cohesive experience powered by a robust Java backend and a modern, responsive frontend, working in harmony.
+*   🔒 **Secure & Reliable**: Built with enterprise-grade Java, ensuring data integrity, security, and a stable foundation for your booking operations.
+*   🚀 **Scalable Architecture**: Designed to grow with your needs, Slotter's modular structure efficiently handles increasing booking volumes and user loads.
+*   ⚙️ **Dockerized Deployment**: Simplify setup and ensure consistent environments across development, testing, and production with containerized services.
 
 ---
 
 ## Technical Architecture
 
-Slotter is engineered with a modern, full-stack architecture, leveraging robust and scalable technologies to deliver a high-performance booking management solution.
+Slotter is engineered with a clear separation of concerns, leveraging a powerful Java backend for business logic and a modern frontend for an engaging user experience, all orchestrated with Docker for streamlined deployment.
 
-| Technology          | Purpose                             | Key Benefit                                |
-| :------------------ | :---------------------------------- | :----------------------------------------- |
-| **Java**            | Backend Business Logic & API        | Robust, scalable, and secure application foundation |
-| **Spring Boot**     | Web Framework for Backend           | Rapid development of RESTful APIs, microservices-ready |
-| **PostgreSQL**      | Database                            | Reliable, high-performance data storage    |
-| **Modern JS Framework** | Frontend User Interface             | Responsive, dynamic, and intuitive user experience |
-| **Docker**          | Containerization & Orchestration    | Consistent environments, simplified deployment, scalability |
+### Tech Stack
+
+| Technology   | Purpose                                 | Key Benefit                                     |
+| :----------- | :-------------------------------------- | :---------------------------------------------- |
+| **Java**     | Backend API & Core Business Logic       | Robust, scalable, and secure application core.  |
+| **Spring Boot** | Backend Framework                       | Rapid development, dependency injection, embedded server. |
+| **Docker**   | Containerization & Environment Management | Consistent environments, simplified deployment, portability. |
+| **Frontend Framework** | User Interface & Interaction            | Interactive, responsive user experience.        |
+
+### Directory Structure
 
 ```
 .
-├── 📁 docker                 # Dockerfile and Docker Compose configurations
-├── 📁 frontend               # Frontend application (e.g., React, Vue, Angular)
-├── 📁 slotter-ws             # Java Spring Boot backend (Slotter Web Service)
-├── 📄 LICENSE                # Project licensing information
-└── 📄 README.md              # This README file
+├── 📁 docker                 # Docker Compose configurations and related files
+├── 📁 frontend               # Frontend application source code (e.g., React, Vue, Angular)
+├── 📁 slotter-ws             # Backend web service (Java/Spring Boot) source code
+├── 📄 .gitignore             # Specifies intentionally untracked files to ignore
+├── 📄 LICENSE                # Project license information
+└── 📄 README.md              # Project overview and documentation
 ```
 
 ---
 
 ## Operational Setup
 
+This section guides you through setting up and running Slotter locally.
+
 ### Prerequisites
 
-Ensure you have the following software installed on your development or deployment environment:
+Ensure you have the following installed on your system:
 
-*   **Java Development Kit (JDK)**: Version 17 or newer.
-*   **Apache Maven**: For building the Java backend.
-*   **Node.js & npm (or Yarn)**: For building the frontend application.
-*   **Docker & Docker Compose**: For containerized deployment.
-*   **Git**: For cloning the repository.
+*   **Java Development Kit (JDK)**: Version 17 or higher.
+*   **Docker Desktop**: For containerization and running services.
+*   **Node.js & npm**: For managing frontend dependencies and building the frontend application.
 
 ### Installation
 
-Follow these steps to get Slotter up and running locally:
+Follow these steps to get Slotter up and running:
 
-1.  **Clone the Repository:**
+1.  **Clone the Repository**:
     ```bash
-    git clone https://github.com/YOUR_ORG_OR_USER/Slotter.git
-    cd Slotter
+    git clone https://github.com/your-org/slotter.git
+    cd slotter
     ```
 
-2.  **Configure Environment Variables (Optional):**
-    *   For the `slotter-ws` backend, database connection details and other configurations are typically managed in `slotter-ws/src/main/resources/application.properties` or `application.yml`. For production, consider using environment variables.
-    *   The `frontend` application may require an `.env` file (e.g., `frontend/.env`) to specify the backend API endpoint. Refer to the `frontend` directory's documentation for specific details.
-
-3.  **Build the Backend (slotter-ws):**
+2.  **Build the Backend (Slotter Web Service)**:
     ```bash
     cd slotter-ws
-    mvn clean install
+    ./mvnw clean install # On Windows, use `mvnw.cmd clean install`
     cd ..
     ```
 
-4.  **Build the Frontend:**
+3.  **Install & Build the Frontend**:
     ```bash
     cd frontend
-    npm install # or yarn install
-    npm run build # or yarn build
+    npm install
+    npm run build # Or the equivalent build command for your frontend framework
     cd ..
     ```
 
-5.  **Run with Docker Compose:**
+4.  **Start the Application with Docker Compose**:
     ```bash
-    docker-compose up --build
+    docker-compose -f docker/docker-compose.yml up --build -d
     ```
-    This command will build Docker images for both the backend and frontend, and then start all services, including a PostgreSQL database.
+    This command will build (if necessary) and start all services defined in the `docker-compose.yml` file in detached mode.
 
-6.  **Access Slotter:**
-    Once all services are up, Slotter should be accessible in your web browser, typically at `http://localhost:80`.
+5.  **Access the Application**:
+    Once all services are up, you can access the Slotter frontend in your web browser, typically at `http://localhost:3000` (or the port configured in your frontend).
 
 ---
 
 ## Community & Governance
 
+We welcome contributions and feedback from the community to make Slotter even better.
+
 ### Contributing
 
-We welcome contributions from the community to make Slotter even better! If you have suggestions, bug reports, or want to contribute code, please follow these guidelines:
+We encourage you to contribute to Slotter! If you have suggestions, bug reports, or want to contribute code, please follow these guidelines:
 
-1.  **Fork** the repository.
-2.  **Create a new branch** for your feature or bug fix: `git checkout -b feature/your-feature-name` or `bugfix/issue-description`.
-3.  **Commit your changes** with a clear and concise message.
-4.  **Push your branch** to your forked repository.
-5.  **Open a Pull Request** against the `main` branch of this repository. Please describe your changes thoroughly.
+1.  **Fork** the repository on GitHub.
+2.  **Clone** your forked repository to your local machine.
+3.  **Create a new branch** for your feature or bug fix: `git checkout -b feature/your-feature-name` or `git checkout -b bugfix/issue-description`.
+4.  **Make your changes**, ensuring they adhere to the project's coding standards.
+5.  **Commit your changes** with a clear and concise message: `git commit -m 'feat: Add new booking calendar view'` or `git commit -m 'fix: Resolve double-booking bug'`.
+6.  **Push your branch** to your forked repository: `git push origin feature/your-feature-name`.
+7.  **Open a Pull Request** against the `main` branch of the original Slotter repository, providing a detailed description of your changes.
 
 ### License
 
-Slotter is released under the **Creative Commons Zero v1.0 Universal** (CC0 1.0 Universal) Public Domain Dedication.
+This project is licensed under the **Creative Commons Zero v1.0 Universal** license.
 
-**Summary of Permissions:**
-This license effectively dedicates the work to the public domain. You are free to:
+This means you are free to copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission. The CC0 1.0 Universal license effectively dedicates the work to the public domain.
 
-*   **Copy:** Reproduce the work in whole or in part.
-*   **Modify:** Adapt, remix, transform, and build upon the material.
-*   **Distribute:** Share copies with others.
-*   **Perform:** Display or perform the work publicly.
-*   **Even for commercial purposes:** Use the work for any purpose, including commercial activities.
-
-**No Rights Reserved:** The author(s) of this work have waived all copyright and related rights to the fullest extent allowed by law. You can use Slotter without asking permission or providing attribution, though attribution is always appreciated.
+For the full text of the license, please see the [LICENSE](LICENSE) file in this repository.
