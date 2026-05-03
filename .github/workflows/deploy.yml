@@ -29,19 +29,19 @@ jobs:
 
               APP_DIR="${{ secrets.APP_DIR }}"
 
-              if [ ! -d "$APP_DIR" ]; then
+              if [ ! -d "$APP_DIR/.git" ]; then
+                echo "No git repo found, cloning fresh..."
+                rm -rf "$APP_DIR"
                 git clone https://github.com/${{ github.repository }}.git "$APP_DIR"
               fi
-
+              
               cd "$APP_DIR"
-
-              pwd
-
+              
               git pull origin main
-
+              
               docker compose down || true
               docker compose up -d --build
-
+              
               docker system prune -f
 
           EOF
