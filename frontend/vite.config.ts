@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
 
   server : {
-    allowedHosts: ["open.srvisaac.work", "slotter.srvisaac.work"]
+    allowedHosts: ["SERVERURL"]
   },
 
   plugins: [
