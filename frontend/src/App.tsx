@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./modules/auth/Login";
 import Dashboard from "./modules/dashboard/DashBoard";
 import Roles from "./modules/roles/Roles"
-import { ProtectedRoute } from "./modules/auth/ProtectedRoute";
+import { ProtectedRoute, ProtectedAction } from "./modules/auth/ProtectedRoute";
 import { useTheme } from "./modules/shared/hooks/useTheme";
 import Users from "./modules/user/User";
 import Action from "./modules/action/Action.tsx";
@@ -16,11 +16,23 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/:slug" element={<ProtectedRoute />}>
-                        <Route path="dashboard" element={<Dashboard />}/>
-                        <Route path="roles" element={<Roles />}/>
-                        <Route path="users" element={<Users />} />
-                        <Route path="actions" element={<Action />} />
-                        <Route path="customers" element={<Customer />} />
+                        <Route path="dashboard" element={<Dashboard />} />
+
+                        <Route element={<ProtectedAction action="Manage Roles" />}>
+                            <Route path="roles" element={<Roles />} />
+                        </Route>
+
+                        <Route element={<ProtectedAction action="Manage Users" />}>
+                            <Route path="users" element={<Users />} />
+                        </Route>
+
+                        <Route element={<ProtectedAction action="Manage Actions" />}>
+                            <Route path="actions" element={<Action />} />
+                        </Route>
+
+                        <Route element={<ProtectedAction action="Manage Customers" />}>
+                            <Route path="customers" element={<Customer />} />
+                        </Route>
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

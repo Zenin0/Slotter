@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import {Navigate, Outlet, useLocation, useNavigate, useParams} from "react-router-dom";
 import { AuthService } from "./AuthService.tsx";
 import { AppProvider, useApp } from "../shared/appcontext/AppContext";
 import { SideBar } from "../shared/sidebar/SideBar";
@@ -25,6 +25,27 @@ const ProtectedLayout = () => {
             </div>
         </>
     );
+};
+
+interface ProtectedActionProps {
+    action: string;
+    children: React.ReactNode;
+}
+
+const ProtectedAction = ({ action, children }: ProtectedActionProps) => {
+    const { user } = useApp();
+    const navigate = useNavigate();
+
+    const hasPermission = user?.role.some(role =>
+        role.isActive &&
+        role.actions?.some(a => a.name === action)
+    );
+
+    if (!hasPermission) {
+        return <Navigate to="/dashboard" replace />;
+    }
+
+    return <>{children}</>;
 };
 
 export const ProtectedRoute = () => {
