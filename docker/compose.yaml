@@ -43,6 +43,12 @@ services:
     command: sh -c "npm install && npm run dev -- --host"
     depends_on:
       - backend
+    networks:
+        - proxy
 
 volumes:
   postgres_data:
+
+networks:
+    proxy:
+      external: true
