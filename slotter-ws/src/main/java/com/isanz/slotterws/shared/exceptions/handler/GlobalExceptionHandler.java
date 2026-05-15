@@ -2,14 +2,13 @@ package com.isanz.slotterws.shared.exceptions.handler;
 
 import com.isanz.slotterws.shared.exceptions.GenericException;
 import com.isanz.slotterws.shared.exceptions.alreadyexists.CompanyAlreadyExistsException;
+import com.isanz.slotterws.shared.exceptions.alreadyexists.CustomerAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.alreadyexists.RoleAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.alreadyexists.UserAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.auth.InvalidCredentialsException;
 import com.isanz.slotterws.shared.exceptions.auth.InvalidSessionException;
 import com.isanz.slotterws.shared.exceptions.auth.SessionExpiredException;
-import com.isanz.slotterws.shared.exceptions.notfound.CompanyNotFoundException;
-import com.isanz.slotterws.shared.exceptions.notfound.RoleNotFoundException;
-import com.isanz.slotterws.shared.exceptions.notfound.UserNotFoundException;
+import com.isanz.slotterws.shared.exceptions.notfound.*;
 import com.isanz.slotterws.shared.model.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +22,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CompanyNotFoundException.class)
     public ResponseEntity<ApiResponse<?>> handleCompanyNotFound(CompanyNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleCustomerNotFound(CustomerNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ActionNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleActionNotFound(ActionNotFoundException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
     }
@@ -41,6 +52,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<?>> handleUserAlreadyExists(UserAlreadyExistsException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(CustomerAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<?>> handleCustomerAlreadyExists(CustomerAlreadyExistsException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
     }

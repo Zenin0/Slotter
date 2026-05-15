@@ -4,6 +4,7 @@ import com.isanz.slotterws.shared.exceptions.base.SlotterException;
 
 public class RoleAlreadyExistsException extends SlotterException {
     public RoleAlreadyExistsException(String message) {
-        super(message);
+        super("Role " + message + " does already exists");
+
     }
 }

@@ -51,6 +51,21 @@ export const SideBar = () => {
                 </button>
                 {user?.role.some(role =>
                     role.isActive &&
+                    role.actions?.some(action => action.name === 'Manage Customers')
+                ) && (
+                    <button
+                        title="Actions"
+                        onClick={() => navigate(`/${company?.slug}/customers`)}
+                        className="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m4-4a4 4 0 100-8 4 4 0 000 8zm6 4a3 3 0 10-6 0"/>
+                        </svg>
+                    </button>
+                )}
+                {user?.role.some(role =>
+                    role.isActive &&
                     role.actions?.some(action => action.name === 'Manage Roles')
                 ) && (                    <button
                         title="Roles"

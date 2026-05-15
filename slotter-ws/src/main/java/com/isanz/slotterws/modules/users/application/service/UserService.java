@@ -65,7 +65,6 @@ public class UserService {
     }
 
     public void update(UUID uuid, UserRequestDTO request) {
-        log.info(request.getIsActive().toString());
         User user = userMapper.toEntity(request, uuid);
         userAdapterIn.update(user);
     }

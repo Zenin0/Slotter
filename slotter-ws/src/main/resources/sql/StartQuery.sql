@@ -80,7 +80,7 @@ CREATE TABLE customer
     UNIQUE(company_id, phone)
 );
 
--- Booking
+-- Customer
 CREATE TABLE booking
 (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),

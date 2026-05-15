@@ -6,6 +6,7 @@ import { ProtectedRoute } from "./modules/auth/ProtectedRoute";
 import { useTheme } from "./modules/shared/hooks/useTheme";
 import Users from "./modules/user/User";
 import Action from "./modules/action/Action.tsx";
+import Customer from "./modules/customer/Customer.tsx";
 
 function App() {
     useTheme();
@@ -19,6 +20,7 @@ function App() {
                         <Route path="roles" element={<Roles />}/>
                         <Route path="users" element={<Users />} />
                         <Route path="actions" element={<Action />} />
+                        <Route path="customers" element={<Customer />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

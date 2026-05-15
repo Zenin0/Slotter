@@ -5,6 +5,7 @@ import com.isanz.slotterws.shared.exceptions.base.SlotterException;
 public class CompanyAlreadyExistsException extends SlotterException {
 
     public CompanyAlreadyExistsException(String message) {
-        super(message);
+        super("Company " + message + " does already exists");
+
     }
 }
