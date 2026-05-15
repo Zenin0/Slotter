@@ -27,25 +27,22 @@ const ProtectedLayout = () => {
     );
 };
 
-interface ProtectedActionProps {
+export interface ProtectedActionProps {
     action: string;
     children: React.ReactNode;
 }
 
-const ProtectedAction = ({ action, children }: ProtectedActionProps) => {
+export const ProtectedAction = ({ action }: { action: string }) => {
     const { user } = useApp();
-    const navigate = useNavigate();
 
     const hasPermission = user?.role.some(role =>
         role.isActive &&
         role.actions?.some(a => a.name === action)
     );
 
-    if (!hasPermission) {
-        return <Navigate to="/dashboard" replace />;
-    }
+    if (!hasPermission) return <Navigate to="/dashboard" replace />;
 
-    return <>{children}</>;
+    return <Outlet />;
 };
 
 export const ProtectedRoute = () => {

@@ -17,11 +17,7 @@ interface ApiResponse<T> {
     success: boolean;
 }
 
-interface CustomersProps {
-    slug: string;
-}
-
-function Customers({slug}: CustomersProps) {
+function Customers() {
     const {t} = useTranslation();
 
     const [customers, setCustomers] = useState<Customer[]>([]);
