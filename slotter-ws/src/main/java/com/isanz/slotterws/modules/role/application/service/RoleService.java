@@ -66,7 +66,7 @@ public class RoleService {
 
     }
 
-    public List<RoleResponseDTO> listAllUser(UUID uuid) throws UserNotFoundException {
+    public List<RoleFullDTO> listAllUser(UUID uuid) throws UserNotFoundException {
         return roleAdapterOut.findAllUser(uuid);
     }
 

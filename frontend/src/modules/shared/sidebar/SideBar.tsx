@@ -38,8 +38,10 @@ export const SideBar = () => {
                               d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                     </svg>
                 </button>
-                {user?.role.some(role => role.name === 'admin' && role.isActive) && (
-                    <button
+                {user?.role.some(role =>
+                    role.isActive &&
+                    role.actions?.some(action => action.name === 'Manage Roles')
+                ) && (                    <button
                         title="Roles"
                         onClick={() => navigate(`/${company?.slug}/roles`)}
                         className="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
@@ -50,7 +52,10 @@ export const SideBar = () => {
                         </svg>
                     </button>
                 )}
-                {user?.role.some(role => role.name === 'admin' && role.isActive) && (
+                {user?.role.some(role =>
+                    role.isActive &&
+                    role.actions?.some(action => action.name === 'Manage Users')
+                ) && (
                     <button
                         title="Users"
                         onClick={() => navigate(`/${company?.slug}/users`)}
@@ -62,6 +67,21 @@ export const SideBar = () => {
                             <circle cx="9" cy="7" r="4"/>
                             <path strokeLinecap="round" strokeLinejoin="round"
                                   d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                        </svg>
+                    </button>
+                )}
+                {user?.role.some(role =>
+                    role.isActive &&
+                    role.actions?.some(action => action.name === 'Manage Actions')
+                ) && (
+                    <button
+                        title="Actions"
+                        onClick={() => navigate(`/${company?.slug}/actions`)}
+                        className="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </button>
                 )}

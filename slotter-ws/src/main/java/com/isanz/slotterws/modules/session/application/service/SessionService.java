@@ -11,12 +11,14 @@ import com.isanz.slotterws.shared.exceptions.auth.InvalidCredentialsException;
 import com.isanz.slotterws.shared.exceptions.auth.InvalidSessionException;
 import com.isanz.slotterws.shared.exceptions.auth.SessionExpiredException;
 import com.isanz.slotterws.shared.exceptions.notfound.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class SessionService {
 

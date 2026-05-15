@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,13 +14,13 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
+@Audited
 @Table(name = "company")
 @ToString(exclude = {"users"})
 public class Company {
 
     @Id
-    @GeneratedValue
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false)

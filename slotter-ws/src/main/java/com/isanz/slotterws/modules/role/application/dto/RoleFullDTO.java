@@ -1,6 +1,6 @@
 package com.isanz.slotterws.modules.role.application.dto;
 
-import com.isanz.slotterws.modules.users.application.dto.UserFullDTO;
+import com.isanz.slotterws.modules.action.application.dto.ActionResponseDTO;
 import com.isanz.slotterws.modules.users.application.dto.UserResponseDTO;
 import lombok.Data;
 
@@ -14,4 +14,5 @@ public class RoleFullDTO {
     String description;
     Boolean isActive;
     List<UserResponseDTO> users;
+    List<ActionResponseDTO> actions;
 }

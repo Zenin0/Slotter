@@ -1,5 +1,6 @@
 package com.isanz.slotterws.modules.role.application.port.mapper;
 
+import com.isanz.slotterws.modules.action.application.port.mapper.ActionMapper;
 import com.isanz.slotterws.modules.role.application.dto.RoleFullDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleRequestDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleResponseDTO;
@@ -19,10 +20,12 @@ public class RoleMapper implements Mapper<Role, RoleRequestDTO, RoleResponseDTO,
 
     private final UserMapper userMapper;
     private final RoleAdapterOut roleAdapterOut;
+    private final ActionMapper actionMapper;
 
-    public RoleMapper(UserMapper userMapper,@Lazy RoleAdapterOut roleAdapterOut) {
+    public RoleMapper(UserMapper userMapper, @Lazy RoleAdapterOut roleAdapterOut, @Lazy ActionMapper actionMapper) {
         this.userMapper = userMapper;
         this.roleAdapterOut = roleAdapterOut;
+        this.actionMapper = actionMapper;
     }
 
     @Override
@@ -32,7 +35,6 @@ public class RoleMapper implements Mapper<Role, RoleRequestDTO, RoleResponseDTO,
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
         dto.setIsActive(entity.getIsActive());
-
         return dto;
     }
 
@@ -65,7 +67,7 @@ public class RoleMapper implements Mapper<Role, RoleRequestDTO, RoleResponseDTO,
         dto.setDescription(entity.getDescription());
         dto.setIsActive(entity.getIsActive());
         dto.setUsers(userMapper.toDTOs(new ArrayList<>(entity.getUsers())));
-
+        dto.setActions(actionMapper.toDTOs(new ArrayList<>(entity.getActions())));
         return dto;
     }
 

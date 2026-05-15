@@ -34,7 +34,7 @@ function Roles() {
     const fetchRoles = async () => {
         try {
             setLoading(true);
-            const response = await RestService.get<ApiResponse<Role[]>>("/api/role");
+            const response = await RestService.get<ApiResponse<Role[]>>("/api/v1/role");
             setRoles(response.data);
         } catch {
             setError("Failed to load roles.");
@@ -51,7 +51,7 @@ function Roles() {
         if (!newName.trim()) return;
         setSaving(true);
         try {
-            await RestService.post("/api/role", { name: newName, description: newDescription });
+            await RestService.post("/api/v1/role", { name: newName, description: newDescription });
             setNewName("");
             setNewDescription("");
             setShowCreate(false);
@@ -73,7 +73,7 @@ function Roles() {
         if (!editingRole || !editName.trim()) return;
         setEditSaving(true);
         try {
-            await RestService.put(`/api/role/${editingRole.id}`, {
+            await RestService.put(`/api/v1/role/${editingRole.id}`, {
                 ...editingRole,
                 name: editName,
                 description: editDescription,
@@ -89,7 +89,7 @@ function Roles() {
 
     const handleToggleActive = async (role: Role) => {
         try {
-            await RestService.put(`/api/role/${role.id}`, { ...role, isActive: !role.isActive });
+            await RestService.put(`/api/v1/role/${role.id}`, { ...role, isActive: !role.isActive });
             await fetchRoles();
         } catch {
             setError("Failed to update role.");

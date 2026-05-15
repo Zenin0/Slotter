@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.envers.Audited;
 import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashSet;
@@ -15,11 +16,12 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@Audited
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @OneToOne

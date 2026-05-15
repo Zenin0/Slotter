@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { RestService } from "../rest/RestService.tsx";
 import { useApp } from "../shared/appcontext/AppContext.tsx";
 
-interface User {
+interface Role {
     id: string;
     name: string;
-    email: string;
-    username: string;
-    profileImage?: string;
     isActive: boolean;
-    companyId: string;
+}
+
+interface Action {
+    uuid: string;
+    name: string;
+    description: string;
+    roles: Role[];
 }
 
 interface ApiResponse<T> {
@@ -18,109 +21,134 @@ interface ApiResponse<T> {
     success: boolean;
 }
 
-function Users() {
+function Actions() {
     const { company } = useApp();
-    const [users, setUsers] = useState<User[]>([]);
+    const [actions, setActions] = useState<Action[]>([]);
+    const [allRoles, setAllRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     // Create modal
     const [showCreate, setShowCreate] = useState(false);
-    const [newEmail, setNewEmail] = useState("");
-    const [newUsername, setNewUsername] = useState("");
-    const [newPassword, setNewPassword] = useState("");
+    const [newName, setNewName] = useState("");
+    const [newDescription, setNewDescription] = useState("");
+    const [newRoleIds, setNewRoleIds] = useState<string[]>([]);
     const [saving, setSaving] = useState(false);
 
     // Edit modal
-    const [editingUser, setEditingUser] = useState<User | null>(null);
-    const [editEmail, setEditEmail] = useState("");
-    const [editUsername, setEditUsername] = useState("");
-    const [editPassword, setEditPassword] = useState("");
+    const [editingAction, setEditingAction] = useState<Action | null>(null);
+    const [editName, setEditName] = useState("");
+    const [editDescription, setEditDescription] = useState("");
+    const [editRoleIds, setEditRoleIds] = useState<string[]>([]);
     const [editSaving, setEditSaving] = useState(false);
 
-    const fetchUsers = async () => {
+    const fetchActions = async () => {
         try {
             setLoading(true);
-            const response = await RestService.get<ApiResponse<User[]>>(`/api/v1/user/company/${company?.id}`);
-            setUsers(response.data);
+            const response = await RestService.get<ApiResponse<Action[]>>("/api/v1/action");
+            setActions(response.data);
         } catch {
-            setError("Failed to load users.");
+            setError("Failed to load actions.");
         } finally {
             setLoading(false);
         }
     };
 
+    const fetchRoles = async () => {
+        try {
+            const response = await RestService.get<ApiResponse<Role[]>>("/api/v1/role");
+            setAllRoles(response.data);
+        } catch {
+            setError("Failed to load roles.");
+        }
+    };
+
     useEffect(() => {
-        if (company?.id) fetchUsers();
-    }, [company?.id]);
+        fetchActions();
+        fetchRoles();
+    }, []);
+
+    const toggleRoleId = (id: string, selected: string[], setSelected: (ids: string[]) => void) => {
+        setSelected(selected.includes(id) ? selected.filter(r => r !== id) : [...selected, id]);
+    };
 
     const handleCreate = async () => {
-        if (!newEmail.trim() || !newUsername.trim() || !newPassword.trim()) return;
+        if (!newName.trim()) return;
         setSaving(true);
         try {
-            await RestService.post("/api/v1/user", {
-                email: newEmail,
-                username: newUsername,
-                password: newPassword,
-                companyId: company?.id,
-                isActive: true,
+            await RestService.post("/api/v1/action", {
+                name: newName,
+                description: newDescription,
+                roleIds: newRoleIds,
             });
-            setNewEmail("");
-            setNewUsername("");
-            setNewPassword("");
+            setNewName("");
+            setNewDescription("");
+            setNewRoleIds([]);
             setShowCreate(false);
-            await fetchUsers();
+            await fetchActions();
         } catch {
-            setError("Failed to create user.");
+            setError("Failed to create action.");
         } finally {
             setSaving(false);
         }
     };
 
-    const openEdit = (user: User) => {
-        setEditingUser(user);
-        setEditEmail(user.email);
-        setEditUsername(user.username);
-        setEditPassword("");
+    const openEdit = (action: Action) => {
+        setEditingAction(action);
+        setEditName(action.name);
+        setEditDescription(action.description);
+        setEditRoleIds(action.roles.map(r => r.id));
     };
 
     const handleEdit = async () => {
-        if (!editingUser || !editEmail.trim() || !editUsername.trim()) return;
+        if (!editingAction || !editName.trim()) return;
         setEditSaving(true);
         try {
-            await RestService.put(`/api/v1/user/${editingUser.id}`, {
-                email: editEmail,
-                username: editUsername,
-                password: editPassword || null,
-                isActive: editingUser.isActive,
-                companyId: editingUser.companyId,
+            await RestService.put(`/api/v1/action/${editingAction.id}`, {
+                name: editName,
+                description: editDescription,
+                roleIds: editRoleIds,
             });
-            setEditingUser(null);
-            setEditPassword("");
-            await fetchUsers();
+            setEditingAction(null);
+            await fetchActions();
         } catch {
-            setError("Failed to update user.");
+            setError("Failed to update action.");
         } finally {
             setEditSaving(false);
         }
     };
 
-    const handleToggleActive = async (user: User) => {
-        try {
-            await RestService.put(`/api/v1/user/${user.id}`, {
-                email: user.email,
-                username: user.username,
-                password: null,
-                isActive: !user.isActive,
-                companyId: user.companyId,
-            });
-            await fetchUsers();
-        } catch {
-            setError("Failed to update user.");
-        }
-    };
-
     if (loading) return null;
+
+    const RoleSelector = ({
+                              selected,
+                              setSelected,
+                          }: {
+        selected: string[];
+        setSelected: (ids: string[]) => void;
+    }) => (
+        <div className="flex flex-wrap gap-2">
+            {allRoles.map(role => {
+                const active = selected.includes(role.id);
+                return (
+                    <button
+                        key={role.id}
+                        type="button"
+                        onClick={() => toggleRoleId(role.id, selected, setSelected)}
+                        className={`text-xs px-3 py-1 rounded-full border font-medium transition-colors ${
+                            active
+                                ? "bg-blue-600 border-blue-600 text-white"
+                                : "border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-500"
+                        }`}>
+                        {role.name}
+                    </button>
+                );
+            })}
+            {allRoles.length === 0 && (
+                <p className="text-xs text-gray-400 dark:text-gray-500">No roles available.</p>
+            )}
+        </div>
+    );
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-8">
@@ -137,12 +165,12 @@ function Users() {
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Users</h1>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Members of {company?.name}</p>
+                        <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Actions</h1>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage actions for {company?.name}</p>
                     </div>
                     <div className="flex items-center gap-3">
                         <span className="text-xs text-gray-400 dark:text-gray-500 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-3 py-1.5 rounded-xl">
-                            {users.length} user{users.length !== 1 ? "s" : ""}
+                            {actions.length} action{actions.length !== 1 ? "s" : ""}
                         </span>
                         <button
                             onClick={() => setShowCreate(true)}
@@ -151,44 +179,40 @@ function Users() {
                                  viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
                             </svg>
-                            New User
+                            New Action
                         </button>
                     </div>
                 </div>
 
-                {/* Users list */}
+                {/* Actions list */}
                 <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 divide-y divide-gray-50 dark:divide-gray-800">
-                    {users.length === 0 ? (
-                        <p className="text-sm text-gray-400 dark:text-gray-500 p-6">No users found.</p>
-                    ) : users.map((u) => (
-                        <div key={u.id} className="flex items-center justify-between px-6 py-4">
+                    {actions.length === 0 ? (
+                        <p className="text-sm text-gray-400 dark:text-gray-500 p-6">No actions found.</p>
+                    ) : actions.map((action) => (
+                        <div key={action.id} className="flex items-center justify-between px-6 py-4">
                             <div className="flex items-center gap-4">
-                                {u.profileImage ? (
-                                    <img src={u.profileImage} alt={u.username}
-                                         className="h-9 w-9 rounded-full object-cover border border-gray-200 dark:border-gray-700"/>
-                                ) : (
-                                    <div className="h-9 w-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
-                                        {u.username[0].toUpperCase()}
-                                    </div>
-                                )}
+                                <div className="h-9 w-9 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
+                                    {action.name[0].toUpperCase()}
+                                </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-gray-800 dark:text-white">{u.username}</p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-500">{u.email}</p>
+                                    <p className="text-sm font-semibold text-gray-800 dark:text-white">{action.name}</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500">{action.description || "No description"}</p>
+                                    {action.roles.length > 0 && (
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                            {action.roles.map(r => (
+                                                <span key={r.id} className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                                                    {r.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.isActive ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400" : "bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400"}`}>
-                                    {u.isActive ? "Active" : "Inactive"}
-                                </span>
                                 <button
-                                    onClick={() => openEdit(u)}
+                                    onClick={() => openEdit(action)}
                                     className="text-xs px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                     Edit
-                                </button>
-                                <button
-                                    onClick={() => handleToggleActive(u)}
-                                    className="text-xs px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                                    {u.isActive ? "Deactivate" : "Activate"}
                                 </button>
                             </div>
                         </div>
@@ -200,12 +224,11 @@ function Users() {
             {showCreate && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 w-full max-w-md">
-                        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">New User</h2>
+                        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">New Action</h2>
                         <div className="flex flex-col gap-4">
                             {[
-                                { label: "Username", value: newUsername, set: setNewUsername, type: "text", placeholder: "e.g. jsmith" },
-                                { label: "Email", value: newEmail, set: setNewEmail, type: "email", placeholder: "you@example.com" },
-                                { label: "Password", value: newPassword, set: setNewPassword, type: "password", placeholder: "••••••••" },
+                                { label: "Name", value: newName, set: setNewName, type: "text", placeholder: "e.g. Send Email" },
+                                { label: "Description", value: newDescription, set: setNewDescription, type: "text", placeholder: "Optional description" },
                             ].map(({ label, value, set, type, placeholder }) => (
                                 <div key={label} className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 dark:text-gray-400">{label}</label>
@@ -218,16 +241,20 @@ function Users() {
                                     />
                                 </div>
                             ))}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Roles</label>
+                                <RoleSelector selected={newRoleIds} setSelected={setNewRoleIds} />
+                            </div>
                         </div>
                         <div className="flex justify-end gap-2 mt-6">
                             <button
-                                onClick={() => { setShowCreate(false); setNewEmail(""); setNewUsername(""); setNewPassword(""); }}
+                                onClick={() => { setShowCreate(false); setNewName(""); setNewDescription(""); setNewRoleIds([]); }}
                                 className="px-4 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                 Cancel
                             </button>
                             <button
                                 onClick={handleCreate}
-                                disabled={saving || !newEmail.trim() || !newUsername.trim() || !newPassword.trim()}
+                                disabled={saving || !newName.trim()}
                                 className="px-4 py-2 text-sm rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium transition-colors">
                                 {saving ? "Saving..." : "Create"}
                             </button>
@@ -237,15 +264,14 @@ function Users() {
             )}
 
             {/* Edit modal */}
-            {editingUser && (
+            {editingAction && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 w-full max-w-md">
-                        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Edit User</h2>
+                        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Edit Action</h2>
                         <div className="flex flex-col gap-4">
                             {[
-                                { label: "Username", value: editUsername, set: setEditUsername, type: "text", placeholder: "e.g. jsmith" },
-                                { label: "Email", value: editEmail, set: setEditEmail, type: "email", placeholder: "you@example.com" },
-                                { label: "New Password", value: editPassword, set: setEditPassword, type: "password", placeholder: "Leave blank to keep current" },
+                                { label: "Name", value: editName, set: setEditName, type: "text", placeholder: "e.g. Send Email" },
+                                { label: "Description", value: editDescription, set: setEditDescription, type: "text", placeholder: "Optional description" },
                             ].map(({ label, value, set, type, placeholder }) => (
                                 <div key={label} className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 dark:text-gray-400">{label}</label>
@@ -258,16 +284,20 @@ function Users() {
                                     />
                                 </div>
                             ))}
+                            <div className="flex flex-col gap-2">3
+                                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Roles</label>
+                                <RoleSelector selected={editRoleIds} setSelected={setEditRoleIds} />
+                            </div>
                         </div>
                         <div className="flex justify-end gap-2 mt-6">
                             <button
-                                onClick={() => { setEditingUser(null); setEditPassword(""); }}
+                                onClick={() => setEditingAction(null)}
                                 className="px-4 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                 Cancel
                             </button>
                             <button
                                 onClick={handleEdit}
-                                disabled={editSaving || !editEmail.trim() || !editUsername.trim()}
+                                disabled={editSaving || !editName.trim()}
                                 className="px-4 py-2 text-sm rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium transition-colors">
                                 {editSaving ? "Saving..." : "Save changes"}
                             </button>
@@ -279,4 +309,4 @@ function Users() {
     );
 }
 
-export default Users;
+export default Actions;

@@ -26,6 +26,13 @@ interface Role {
     name: string;
     description: string;
     isActive: boolean
+    actions: Action[]
+}
+
+interface Action {
+    id: string;
+    name: string;
+    description: string;
 }
 
 interface ApiResponse<T> {
@@ -56,15 +63,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const fetchAppData = async () => {
             try {
-                const userResponse = await RestService.get<ApiResponse<User>>("/api/user/" + localStorage.getItem("user_id"));
+                const userResponse = await RestService.get<ApiResponse<User>>("/api/v1/user/" + localStorage.getItem("user_id"));
                 const userData = userResponse.data;
 
 
-                const companyResponse = await RestService.get<ApiResponse<Company>>(`/api/company/${userData.company.id}`);
+                const companyResponse = await RestService.get<ApiResponse<Company>>(`/api/v1/company/${userData.company.id}`);
                 const companyData = companyResponse.data;
                 setCompany(companyData);
 
-                const rolesResponse = await RestService.get<ApiResponse<Role[]>>(`/api/role/user/${userData.id}`);
+                const rolesResponse = await RestService.get<ApiResponse<Role[]>>(`/api/v1/role/user/${userData.id}`);
                 userData.role = rolesResponse.data
                 setUser(userData);
 

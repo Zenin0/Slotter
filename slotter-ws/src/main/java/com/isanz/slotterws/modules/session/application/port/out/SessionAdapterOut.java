@@ -21,6 +21,11 @@ public class SessionAdapterOut implements AdapterOut<SessionResponseDTO, Session
     }
 
     @Override
+    public List<SessionFullDTO> findAllFull() {
+        return List.of();
+    }
+
+    @Override
     public List<SessionResponseDTO> findAll() {
         return List.of();
     }

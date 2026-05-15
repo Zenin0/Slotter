@@ -29,6 +29,11 @@ public class CompanyAdapterOut implements AdapterOut<CompanyResponseDTO, Company
 
 
     @Override
+    public List<CompanyFullDTO> findAllFull() {
+        return companyMapper.toFullDTOs(companyRepository.findAll());
+    }
+
+    @Override
     public List<CompanyResponseDTO> findAll() {
         return companyMapper.toDTOs(companyRepository.findAll());
     }

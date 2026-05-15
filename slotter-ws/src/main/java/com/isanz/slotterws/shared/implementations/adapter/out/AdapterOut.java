@@ -5,6 +5,8 @@ import java.util.UUID;
 
 public interface AdapterOut<Res, E, Full> {
 
+    List<Full> findAllFull();
+
     List<Res> findAll();
 
     E findOne(UUID id);
@@ -12,7 +14,6 @@ public interface AdapterOut<Res, E, Full> {
     boolean alreadyExists(String parameter);
 
     Full show(UUID uuid);
-
 
 
 }

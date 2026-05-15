@@ -26,6 +26,11 @@ public class RoleAdapterOut implements AdapterOut<RoleResponseDTO, Role, RoleFul
     }
 
     @Override
+    public List<RoleFullDTO> findAllFull() {
+        return roleMapper.toFullDTOs(roleRepository.findAll());
+    }
+
+    @Override
     public List<RoleResponseDTO> findAll() {
         return roleMapper.toDTOs(roleRepository.findAll());
     }
@@ -61,10 +66,10 @@ public class RoleAdapterOut implements AdapterOut<RoleResponseDTO, Role, RoleFul
 
     }
 
-    public List<RoleResponseDTO> findAllUser(UUID uuid) {
+    public List<RoleFullDTO> findAllUser(UUID uuid) {
 
         Set<User> users = Collections.singleton(userAdapterOut.findOne(uuid));
 
-        return roleMapper.toDTOs(roleRepository.findAllByUsersIn(users));
+        return roleMapper.toFullDTOs(roleRepository.findAllByUsersIn(users));
     }
 }

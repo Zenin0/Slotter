@@ -34,6 +34,10 @@ public class UserAdapterOut implements AdapterOut<UserResponseDTO, User, UserFul
 
 
     @Override
+    public List<UserFullDTO> findAllFull() {
+        return userMapper.toFullDTOs(userRepository.findAll());    }
+
+    @Override
     public List<UserResponseDTO> findAll() {
         return userMapper.toDTOs(userRepository.findAll());
     }

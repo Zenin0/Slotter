@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/role")
+@RequestMapping("/api/v1/role")
 public class RoleController {
 
     private final RoleService roleService;
@@ -49,7 +49,7 @@ public class RoleController {
     }
 
     @GetMapping("/user/{uuid}")
-    public ResponseEntity<ApiResponse<List<RoleResponseDTO>>> listAllUser(@PathVariable UUID uuid) {
+    public ResponseEntity<ApiResponse<List<RoleFullDTO>>> listAllUser(@PathVariable UUID uuid) {
         return ResponseEntity.ok(ApiResponse.ok(roleService.listAllUser(uuid)));
     }
 }

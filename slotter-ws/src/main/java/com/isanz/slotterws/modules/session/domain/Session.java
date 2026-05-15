@@ -15,8 +15,7 @@ import java.util.UUID;
 public class Session {
 
     @Id
-    @GeneratedValue
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
