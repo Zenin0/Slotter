@@ -27,11 +27,6 @@ const ProtectedLayout = () => {
     );
 };
 
-export interface ProtectedActionProps {
-    action: string;
-    children: React.ReactNode;
-}
-
 export const ProtectedAction = ({ action }: { action: string }) => {
     const { user } = useApp();
 
