@@ -24,7 +24,7 @@ jobs:
             -o StrictHostKeyChecking=no \
             -p ${{ secrets.SSH_PORT }} \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-
+              
               set -e
 
               APP_DIR="${{ secrets.APP_DIR }}"
@@ -33,13 +33,14 @@ jobs:
                 echo "No git repo found, cloning fresh..."
                 git clone https://github.com/${{ github.repository }}.git "$APP_DIR"
               fi
-
+              
               cd "$APP_DIR"
-
+              
               git pull origin main
-
+              
               docker compose -f ./docker/compose.yaml down || true
               docker compose -f ./docker/compose.yaml up -d --build --force-recreate --remove-orphans
-
+              
               docker system prune -f
+
           EOF

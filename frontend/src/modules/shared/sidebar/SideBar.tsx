@@ -2,16 +2,27 @@ import { useTheme } from "../hooks/useTheme";
 import { AuthService } from "../../auth/AuthService";
 import { useApp } from "../appcontext/AppContext";
 import { useNavigate } from "react-router-dom";
+import i18n from "../../../i18n.ts";
+import { useState } from "react";
 
 export const SideBar = () => {
     const { dark, toggle } = useTheme();
     const { user, company } = useApp();
     const navigate = useNavigate();
+    const [langOpen, setLangOpen] = useState(false);
+
 
     const handleLogout = () => {
         AuthService.logout();
         navigate("/login", { replace: true });
     };
+
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+        localStorage.setItem("lang", lng);
+        setLangOpen(false);
+    };
+
 
     return (
         <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center justify-between gap-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border border-gray-200 dark:border-gray-700 shadow-xl rounded-2xl px-3 py-4">
@@ -108,6 +119,41 @@ export const SideBar = () => {
                         </svg>
                     )}
                 </button>
+
+                {/* Language selector */}
+                <div className="relative">
+                    <button
+                        onClick={() => setLangOpen(!langOpen)}
+                        title="Language"
+                        className="p-2 rounded-xl text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                        🌍
+                    </button>
+
+                    {/* Dropdown */}
+                    {langOpen && (
+                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col gap-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-1">
+                            <button
+                                onClick={() => changeLanguage("en")}
+                                className="px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                            >
+                                🇬🇧
+                            </button>
+                            <button
+                                onClick={() => changeLanguage("es")}
+                                className="px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                            >
+                                🇪🇸
+                            </button>
+                            <button
+                                onClick={() => changeLanguage("de")}
+                                className="px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                            >
+                                🇩🇪
+                            </button>
+                        </div>
+                    )}
+                </div>
 
                 {/* Profile picture */}
                 {user?.profileImage ? (

@@ -2,8 +2,12 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import { AuthService } from "./AuthService.tsx";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n.ts";
 
 function Login() {
+    const { t } = useTranslation();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -17,14 +21,20 @@ function Login() {
         }
     }, []);
 
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+        localStorage.setItem("lang", lng);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+
         try {
             await AuthService.login(email, password);
             navigate("/dashboard");
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Something went wrong");
+            setError(err instanceof Error ? err.message : t("somethingWrong"));
         }
     };
 
@@ -35,49 +45,78 @@ function Login() {
             {error && (
                 <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-red-50 dark:bg-red-900/30 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg shadow-md">
                     <span>⚠️ {error}</span>
-                    <button onClick={() => setError(null)}
-                            className="text-red-400 hover:text-red-600 dark:hover:text-red-300 font-bold">✕</button>
+                    <button
+                        onClick={() => setError(null)}
+                        className="text-red-400 hover:text-red-600 dark:hover:text-red-300 font-bold"
+                    >
+                        ✕
+                    </button>
                 </div>
             )}
 
             {/* Card */}
             <div className="bg-white dark:bg-gray-900 border border-transparent dark:border-gray-700 rounded-2xl shadow-lg p-8 w-full max-w-md">
-                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-1">Welcome back 👋</h2>
-                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">Sign in to your account</p>
+
+
+                {/* Language selector */}
+                <div className="flex justify-end mb-4">
+                    <select
+                        value={i18n.language}
+                        onChange={(e) => changeLanguage(e.target.value)}
+                        className="text-sm border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    >
+                        <option value="en">🇬🇧</option>
+                        <option value="es">🇪🇸</option>
+                        <option value="de">🇩🇪</option>
+                    </select>
+                </div>
+
+                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-1">
+                    {t("welcomeBack")}
+                </h2>
+
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
+                    {t("signIn")}
+                </p>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
                     {/* Email */}
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Email</label>
+                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            {t("email")}
+                        </label>
                         <input
                             type="email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            placeholder={t("emailPlaceholder")}
                             className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-gray-400 dark:placeholder-gray-600"
-                            placeholder="you@example.com"
                         />
                     </div>
 
                     {/* Password */}
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Password</label>
+                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            {t("password")}
+                        </label>
                         <input
                             type="password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            placeholder={t("passwordPlaceholder")}
                             className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-gray-400 dark:placeholder-gray-600"
-                            placeholder="••••••••"
                         />
                     </div>
 
                     {/* Submit */}
                     <button
                         type="submit"
-                        className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">
-                        Login
+                        className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition"
+                    >
+                        {t("login")}
                     </button>
                 </form>
             </div>
