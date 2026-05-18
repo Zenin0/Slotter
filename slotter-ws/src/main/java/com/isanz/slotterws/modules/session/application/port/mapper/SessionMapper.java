@@ -4,73 +4,32 @@ import com.isanz.slotterws.modules.session.application.dto.SessionFullDTO;
 import com.isanz.slotterws.modules.session.application.dto.SessionRequestDTO;
 import com.isanz.slotterws.modules.session.application.dto.SessionResponseDTO;
 import com.isanz.slotterws.modules.session.domain.Session;
-import com.isanz.slotterws.shared.implementations.adapter.mapper.Mapper;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Component
-public class SessionMapper implements Mapper<Session, SessionRequestDTO, SessionResponseDTO, SessionFullDTO> {
+@Mapper(componentModel = "spring")
+public interface SessionMapper {
 
-    @Override
-    public SessionResponseDTO toDTO(Session entity) {
-        SessionResponseDTO response = new SessionResponseDTO();
-        response.setToken(entity.getToken());
-        response.setUserid(entity.getUser().getId());
-        return response;
-    }
+    @Mapping(target = "userid", source = "user.id")
+    SessionResponseDTO toDTO(Session entity);
 
-    @Override
-    public List<SessionResponseDTO> toDTOs(List<Session> entities) {
-        return List.of();
-    }
+    List<SessionResponseDTO> toDTOs(List<Session> entities);
 
-    @Override
-    public Session fromDTO(SessionRequestDTO request) {
-        Session session = new Session();
-        session.setUser(request.getUser());
-        session.setToken(request.getToken());
-        session.setIpAddress(request.getIpAddress());
-        session.setUserAgent(request.getUserAgent());
-        session.setCreatedAt(LocalDateTime.now());
-        session.setExpiresAt(LocalDateTime.now().plusDays(7));
-        return session;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "expiresAt", ignore = true)
+    Session fromDTO(SessionRequestDTO request);
 
-    @Override
-    public SessionFullDTO toFullDTO(Session entity) {
-        SessionFullDTO dto = new SessionFullDTO();
-        dto.setId(entity.getId());
-        dto.setUserId(entity.getUser().getId());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setToken(entity.getToken());
-        dto.setIpAddress(entity.getIpAddress());
-        dto.setExpiresAt(entity.getExpiresAt());
-        return dto;
-    }
+    @Mapping(target = "userId", source = "user.id")
+    SessionFullDTO toFullDTO(Session entity);
 
-    @Override
-    public List<SessionFullDTO> toFullDTOs(List<Session> entities) {
-        List<SessionFullDTO> dtos = new ArrayList<>();
-        for (Session session : entities) {
-            dtos.add(toFullDTO(session));
-        }
+    List<SessionFullDTO> toFullDTOs(List<Session> entities);
 
-        return dtos;
-    }
-
-    @Override
-    public Session toEntity(SessionRequestDTO request, UUID uuid) {
-        Session session = new Session();
-        session.setId(uuid);
-        session.setToken(request.getToken());
-        session.setIpAddress(request.getIpAddress());
-        session.setUserAgent(request.getUserAgent());
-        session.setUser(request.getUser());
-
-        return session;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "expiresAt", ignore = true)
+    void updateEntity(SessionRequestDTO request, @MappingTarget Session session);
 }

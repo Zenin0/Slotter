@@ -5,75 +5,31 @@ import com.isanz.slotterws.modules.company.application.dto.CompanyRequestDTO;
 import com.isanz.slotterws.modules.company.application.dto.CompanyResponseDTO;
 import com.isanz.slotterws.modules.company.domain.Company;
 import com.isanz.slotterws.modules.users.application.port.mapper.UserMapper;
-import com.isanz.slotterws.shared.implementations.adapter.mapper.Mapper;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Component
-public class CompanyMapper implements Mapper<Company, CompanyRequestDTO, CompanyResponseDTO, CompanyFullDTO> {
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
+public interface CompanyMapper {
 
-    private final UserMapper userMapper;
+    CompanyResponseDTO toDTO(Company company);
 
-    public CompanyMapper(@Lazy UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    List<CompanyResponseDTO> toDTOs(List<Company> entities);
 
-    @Override
-    public CompanyResponseDTO toDTO(Company company) {
-        CompanyResponseDTO dto = new CompanyResponseDTO();
-        dto.setId(company.getId());
-        dto.setName(company.getName());
-        dto.setSlug(company.getSlug());
-        return dto;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "companyLogo", ignore = true)
+    @Mapping(target = "users", ignore = true)
+    Company fromDTO(CompanyRequestDTO request);
 
-    @Override
-    public List<CompanyResponseDTO> toDTOs(List<Company> entities) {
-        List<CompanyResponseDTO> list = new ArrayList<>();
-        for (Company company : entities) {
-            list.add(toDTO(company));
-        }
-        return list;
-    }
+    @Mapping(target = "users", source = "users")
+    CompanyFullDTO toFullDTO(Company entity);
 
-    @Override
-    public Company fromDTO(CompanyRequestDTO request) {
-        Company company = new Company();
-        company.setName(request.getName());
-        company.setSlug(request.getSlug());
-        return company;
-    }
+    List<CompanyFullDTO> toFullDTOs(List<Company> entities);
 
-    @Override
-    public CompanyFullDTO toFullDTO(Company entity) {
-        CompanyFullDTO dto = new CompanyFullDTO();
-        dto.setId(entity.getId());
-        dto.setCompanyLogo(entity.getCompanyLogo());
-        dto.setName(entity.getName());
-        dto.setSlug(entity.getSlug());
-        dto.setUsers(userMapper.toDTOs(new ArrayList<>(entity.getUsers())));
-        return dto;
-    }
-
-    @Override
-    public List<CompanyFullDTO> toFullDTOs(List<Company> entities) {
-        List<CompanyFullDTO> dtos = new ArrayList<>();
-        for (Company company : entities) {
-            dtos.add(toFullDTO(company));
-        }
-        return dtos;
-    }
-
-    @Override
-    public Company toEntity(CompanyRequestDTO request, UUID uuid) {
-        Company company = new Company();
-        company.setId(uuid);
-        company.setSlug(request.getSlug());
-        company.setName(request.getName());
-        return company;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "companyLogo", ignore = true)
+    @Mapping(target = "users", ignore = true)
+    void updateEntity(CompanyRequestDTO request, @MappingTarget Company company);
 }

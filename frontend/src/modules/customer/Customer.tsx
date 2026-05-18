@@ -97,7 +97,7 @@ function Customers() {
         setEditSaving(true);
 
         try {
-            await RestService.put(`/api/v1/customer//+${company?.slug}/${editingCustomer.id}`, {
+            await RestService.put(`/api/v1/customer/${company?.slug}/${editingCustomer.id}`, {
                 ...editingCustomer,
                 name: editName,
                 email: editEmail,

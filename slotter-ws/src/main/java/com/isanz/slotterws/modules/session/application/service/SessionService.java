@@ -46,9 +46,6 @@ public class SessionService {
         String token = UUID.randomUUID().toString();
         request.setToken(token);
         request.setUser(user);
-
-
-
         return sessionAdapterIn.create(request);
     }
 

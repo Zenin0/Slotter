@@ -49,20 +49,7 @@ public class CustomerAdapterOut implements AdapterOut<CustomerResponseDTO, Custo
 
     @Override
     public boolean alreadyExists(String parameter) {
-        Optional<Customer> customer = customerRepository.findByEmail(parameter);
-
-        if (customer.isPresent()) {
-            throw new CustomerAlreadyExistsException(parameter);
-        }
-
-        customer = customerRepository.findByPhone(parameter);
-
-        if (customer.isPresent()) {
-            throw new CustomerAlreadyExistsException(parameter);
-        }
-
         return false;
-
     }
 
     @Override

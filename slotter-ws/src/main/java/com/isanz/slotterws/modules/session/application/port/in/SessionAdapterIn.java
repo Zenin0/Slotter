@@ -8,6 +8,7 @@ import com.isanz.slotterws.modules.session.domain.SessionRepository;
 import com.isanz.slotterws.shared.implementations.adapter.in.AdapterIn;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -24,9 +25,9 @@ public class SessionAdapterIn implements AdapterIn<SessionRequestDTO, SessionRes
     @Override
     public SessionResponseDTO create(SessionRequestDTO request) {
         Session session = sessionMapper.fromDTO(request);
-
+        session.setCreatedAt(LocalDateTime.now());
+        session.setExpiresAt(LocalDateTime.now().plusDays(7));
         session = sessionRepository.save(session);
-
         return sessionMapper.toDTO(session);
     }
 

@@ -15,6 +15,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<Login />} />
+
+                    {/* Backoffice - protected */}
                     <Route path="/:slug" element={<ProtectedRoute />}>
                         <Route path="dashboard" element={<Dashboard />} />
 
@@ -34,6 +36,7 @@ function App() {
                             <Route path="customers" element={<Customer />} />
                         </Route>
                     </Route>
+
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
             </BrowserRouter>

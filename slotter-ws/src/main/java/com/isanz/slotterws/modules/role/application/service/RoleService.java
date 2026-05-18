@@ -42,6 +42,8 @@ public class RoleService {
             throw new RoleAlreadyExistsException("Ya existe un rol con el nombre " + request.getName());
         }
 
+        request.setIsActive(true);
+
         return roleAdapterIn.create(request);
     }
 
@@ -69,9 +71,9 @@ public class RoleService {
     public List<RoleFullDTO> listAllUser(UUID uuid) throws UserNotFoundException {
         return roleAdapterOut.findAllUser(uuid);
     }
-
     public void update(UUID uuid, RoleRequestDTO request) {
-        Role role = roleMapper.toEntity(request, uuid);
-        roleAdapterIn.update(role);
+        Role existing = roleAdapterOut.findOne(uuid);
+        roleMapper.updateEntity(request, existing);
+        roleAdapterIn.update(existing);
     }
 }

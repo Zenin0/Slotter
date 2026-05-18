@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class CustomerAdapterIn implements AdapterIn<CustomerRequestDTO, CustomerResponseDTO, Customer> {
+public class CustomerAdapterIn{
     private final CustomerMapper customerMapper;
     private final CustomerRepository customerRepository;
 
@@ -20,21 +20,15 @@ public class CustomerAdapterIn implements AdapterIn<CustomerRequestDTO, Customer
         this.customerRepository = customerRepository;
     }
 
-    @Override
-    public CustomerResponseDTO create(CustomerRequestDTO request) {
-        Customer customer = customerMapper.fromDTO(request);
-
+    public CustomerResponseDTO create(Customer customer) {
         customer = customerRepository.save(customer);
-
         return customerMapper.toDTO(customer);
     }
 
-    @Override
     public void delete(UUID uuid) {
         customerRepository.deleteById(uuid);
     }
 
-    @Override
     public void update(Customer entity) {
         customerRepository.save(entity);
     }

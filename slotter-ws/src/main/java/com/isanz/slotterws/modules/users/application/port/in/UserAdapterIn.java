@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class UserAdapterIn implements AdapterIn<UserRequestDTO, UserResponseDTO, User> {
+public class UserAdapterIn {
 
     private final UserMapper userMapper;
 
@@ -26,11 +26,8 @@ public class UserAdapterIn implements AdapterIn<UserRequestDTO, UserResponseDTO,
         this.userRepository = userRepository;
     }
 
-    @Override
-    public UserResponseDTO create(UserRequestDTO request) throws CompanyNotFoundException, GenericException {
+    public UserResponseDTO create(User user) throws CompanyNotFoundException, GenericException {
         try {
-            User user = userMapper.fromDTO(request);
-
             user = userRepository.save(user);
 
             return userMapper.toDTO(user);
@@ -41,12 +38,10 @@ public class UserAdapterIn implements AdapterIn<UserRequestDTO, UserResponseDTO,
         }
     }
 
-    @Override
     public void delete(UUID uuid) {
         userRepository.deleteById(uuid);
     }
 
-    @Override
     public void update(User entity) {
         userRepository.save(entity);
     }
