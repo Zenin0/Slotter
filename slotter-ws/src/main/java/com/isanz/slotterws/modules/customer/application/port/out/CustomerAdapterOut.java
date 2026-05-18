@@ -5,19 +5,19 @@ import com.isanz.slotterws.modules.customer.application.dto.CustomerResponseDTO;
 import com.isanz.slotterws.modules.customer.application.port.mapper.CustomerMapper;
 import com.isanz.slotterws.modules.customer.domain.Customer;
 import com.isanz.slotterws.modules.customer.domain.CustomerRepository;
-import com.isanz.slotterws.shared.exceptions.alreadyexists.CustomerAlreadyExistsException;
 import com.isanz.slotterws.shared.exceptions.notfound.CustomerNotFoundException;
-import com.isanz.slotterws.shared.implementations.adapter.out.AdapterOut;
+import com.isanz.slotterws.shared.implementations.adapter.ExistenceCheckable;
+import com.isanz.slotterws.shared.implementations.adapter.Findable;
+import com.isanz.slotterws.shared.implementations.adapter.FullViewable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class CustomerAdapterOut implements AdapterOut<CustomerResponseDTO, Customer, CustomerFullDTO> {
+public class CustomerAdapterOut implements Findable<CustomerResponseDTO, Customer>, ExistenceCheckable, FullViewable<CustomerFullDTO> {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
 
@@ -36,6 +36,7 @@ public class CustomerAdapterOut implements AdapterOut<CustomerResponseDTO, Custo
         return customerMapper.toDTOs(customerRepository.findAll());
     }
 
+
     @Override
     public Customer findOne(UUID id) {
         Optional<Customer> customer = customerRepository.findById(id);
@@ -46,6 +47,7 @@ public class CustomerAdapterOut implements AdapterOut<CustomerResponseDTO, Custo
 
         return customer.get();
     }
+
 
     @Override
     public boolean alreadyExists(String parameter) {

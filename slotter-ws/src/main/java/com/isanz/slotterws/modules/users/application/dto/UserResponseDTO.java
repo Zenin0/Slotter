@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Data
-@Component
 public class UserResponseDTO {
     UUID id;
     String email;

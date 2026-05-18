@@ -9,7 +9,9 @@ import com.isanz.slotterws.modules.users.domain.User;
 import com.isanz.slotterws.modules.users.domain.UserRepository;
 import com.isanz.slotterws.shared.exceptions.notfound.CompanyNotFoundException;
 import com.isanz.slotterws.shared.exceptions.notfound.UserNotFoundException;
-import com.isanz.slotterws.shared.implementations.adapter.out.AdapterOut;
+import com.isanz.slotterws.shared.implementations.adapter.ExistenceCheckable;
+import com.isanz.slotterws.shared.implementations.adapter.Findable;
+import com.isanz.slotterws.shared.implementations.adapter.FullViewable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class UserAdapterOut implements AdapterOut<UserResponseDTO, User, UserFullDTO> {
+public class UserAdapterOut implements FullViewable<UserFullDTO>, Findable<UserResponseDTO, User>, ExistenceCheckable {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -32,10 +34,10 @@ public class UserAdapterOut implements AdapterOut<UserResponseDTO, User, UserFul
         this.companyAdapterOut = companyAdapterOut;
     }
 
-
     @Override
     public List<UserFullDTO> findAllFull() {
-        return userMapper.toFullDTOs(userRepository.findAll());    }
+        return userMapper.toFullDTOs(userRepository.findAll());
+    }
 
     @Override
     public List<UserResponseDTO> findAll() {

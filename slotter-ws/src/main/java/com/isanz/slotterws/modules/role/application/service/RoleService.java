@@ -44,7 +44,7 @@ public class RoleService {
 
         request.setIsActive(true);
 
-        return roleAdapterIn.create(request);
+        return roleAdapterIn.create(roleMapper.fromDTO(request));
     }
 
     public RoleFullDTO show(UUID uuid) {

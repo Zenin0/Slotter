@@ -5,13 +5,15 @@ import com.isanz.slotterws.modules.role.application.dto.RoleResponseDTO;
 import com.isanz.slotterws.modules.role.application.port.mapper.RoleMapper;
 import com.isanz.slotterws.modules.role.domain.Role;
 import com.isanz.slotterws.modules.role.domain.RoleRepository;
-import com.isanz.slotterws.shared.implementations.adapter.in.AdapterIn;
+import com.isanz.slotterws.shared.implementations.adapter.Creatable;
+import com.isanz.slotterws.shared.implementations.adapter.Deletable;
+import com.isanz.slotterws.shared.implementations.adapter.Updatable;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-public class RoleAdapterIn implements AdapterIn<RoleRequestDTO, RoleResponseDTO, Role> {
+public class RoleAdapterIn implements Creatable<Role, RoleResponseDTO>, Deletable, Updatable<Role> {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
 
@@ -21,8 +23,7 @@ public class RoleAdapterIn implements AdapterIn<RoleRequestDTO, RoleResponseDTO,
     }
 
     @Override
-    public RoleResponseDTO create(RoleRequestDTO request) {
-        Role role = roleMapper.fromDTO(request);
+    public RoleResponseDTO create(Role role) {
 
         role = roleRepository.save(role);
 

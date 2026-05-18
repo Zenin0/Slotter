@@ -1,6 +1,5 @@
 package com.isanz.slotterws.modules.role.application.port.mapper;
 
-import com.isanz.slotterws.modules.action.application.port.mapper.ActionMapper;
 import com.isanz.slotterws.modules.role.application.dto.RoleFullDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleRequestDTO;
 import com.isanz.slotterws.modules.role.application.dto.RoleResponseDTO;
@@ -12,9 +11,8 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, ActionMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface RoleMapper {
-
     RoleResponseDTO toDTO(Role entity);
 
     List<RoleResponseDTO> toDTOs(List<Role> entities);

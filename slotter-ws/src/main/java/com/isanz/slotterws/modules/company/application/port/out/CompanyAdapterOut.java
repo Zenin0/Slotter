@@ -6,7 +6,6 @@ import com.isanz.slotterws.modules.company.application.port.mapper.CompanyMapper
 import com.isanz.slotterws.modules.company.domain.Company;
 import com.isanz.slotterws.modules.company.domain.CompanyRepository;
 import com.isanz.slotterws.shared.exceptions.notfound.CompanyNotFoundException;
-import com.isanz.slotterws.shared.implementations.adapter.out.AdapterOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class CompanyAdapterOut implements AdapterOut<CompanyResponseDTO, Company, CompanyFullDTO> {
+public class CompanyAdapterOut {
 
     private final CompanyRepository companyRepository;
 
@@ -28,17 +27,14 @@ public class CompanyAdapterOut implements AdapterOut<CompanyResponseDTO, Company
     }
 
 
-    @Override
     public List<CompanyFullDTO> findAllFull() {
         return companyMapper.toFullDTOs(companyRepository.findAll());
     }
 
-    @Override
     public List<CompanyResponseDTO> findAll() {
         return companyMapper.toDTOs(companyRepository.findAll());
     }
 
-    @Override
     public Company findOne(UUID companyId) throws CompanyNotFoundException {
         Optional<Company> company = companyRepository.findById(companyId);
 
@@ -49,14 +45,12 @@ public class CompanyAdapterOut implements AdapterOut<CompanyResponseDTO, Company
         return company.get();
     }
 
-    @Override
     public boolean alreadyExists(String companyName) {
         Optional<Company> company = companyRepository.findByName((companyName));
 
         return company.isPresent();
     }
 
-    @Override
     public CompanyFullDTO show(UUID uuid) {
         Company company = findOne(uuid);
 

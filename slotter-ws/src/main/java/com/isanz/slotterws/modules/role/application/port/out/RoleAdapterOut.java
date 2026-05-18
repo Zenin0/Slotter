@@ -8,13 +8,15 @@ import com.isanz.slotterws.modules.role.domain.RoleRepository;
 import com.isanz.slotterws.modules.users.application.port.out.UserAdapterOut;
 import com.isanz.slotterws.modules.users.domain.User;
 import com.isanz.slotterws.shared.exceptions.notfound.RoleNotFoundException;
-import com.isanz.slotterws.shared.implementations.adapter.out.AdapterOut;
+import com.isanz.slotterws.shared.implementations.adapter.ExistenceCheckable;
+import com.isanz.slotterws.shared.implementations.adapter.Findable;
+import com.isanz.slotterws.shared.implementations.adapter.FullViewable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-public class RoleAdapterOut implements AdapterOut<RoleResponseDTO, Role, RoleFullDTO> {
+public class RoleAdapterOut implements Findable<RoleResponseDTO, Role>, ExistenceCheckable, FullViewable<RoleFullDTO> {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final UserAdapterOut userAdapterOut;
@@ -26,13 +28,13 @@ public class RoleAdapterOut implements AdapterOut<RoleResponseDTO, Role, RoleFul
     }
 
     @Override
-    public List<RoleFullDTO> findAllFull() {
-        return roleMapper.toFullDTOs(roleRepository.findAll());
+    public List<RoleResponseDTO> findAll() {
+        return roleMapper.toDTOs(roleRepository.findAll());
     }
 
     @Override
-    public List<RoleResponseDTO> findAll() {
-        return roleMapper.toDTOs(roleRepository.findAll());
+    public List<RoleFullDTO> findAllFull() {
+        return roleMapper.toFullDTOs(roleRepository.findAll());
     }
 
     @Override

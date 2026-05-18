@@ -38,7 +38,7 @@ public class CustomerController {
 
     @PutMapping("/{slug}/{uuid}")
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> update(@RequestBody final CustomerRequestDTO request, @PathVariable UUID uuid) {
-        customerService.update(request, uuid);
+        customerService.update(uuid, request);
         return ResponseEntity.ok(ApiResponse.ok());
     }
 }
